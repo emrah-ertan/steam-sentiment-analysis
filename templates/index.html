@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Ana Sayfa</h1>
+<p>Toplam Yorum Sayısı: {{ total_comments }}</p>
+
+<div class="box">
+    <h2>Transformers Model Sonuçları</h2>
+    <canvas id="pretrainedChart"></canvas>
+</div>
+
+<div class="box" style="margin-top: 2rem;">
+    <h2>LSTM Model Sonuçları</h2>
+    <canvas id="lstmChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const pretrainedData = {
+        labels: ["Olumlu", "Olumsuz"],
+        datasets: [{
+            label: "Pretrained",
+            data: [{{ pretrained_positive }}, {{ pretrained_negative }}],
+            backgroundColor: ["#66c0f4", "#c23b22"]
+        }]
+    };
+
+    const lstmData = {
+        labels: ["Olumlu", "Olumsuz"],
+        datasets: [{
+            label: "LSTM",
+            data: [{{ lstm_positive }}, {{ lstm_negative }}],
+            backgroundColor: ["#a1c835", "#b22222"]
+        }]
+    };
+
+    const options = {
+        plugins: {
+            legend: {
+                labels: {
+                    color: "white"
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: "white"
+                }
+            },
+            y: {
+                ticks: {
+                    color: "white"
+                }
+            }
+        }
+    };
+
+    new Chart(document.getElementById("pretrainedChart"), {
+        type: 'bar',
+        data: pretrainedData,
+        options: options
+    });
+
+    new Chart(document.getElementById("lstmChart"), {
+        type: 'bar',
+        data: lstmData,
+        options: options
+    });
+</script>
+{% endblock %}

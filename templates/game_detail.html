@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>{{ game_name }}</h2>
+
+<div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+  {% if pretrained %}
+    <div class="box" style="flex: 1; min-width: 300px;">
+      <h3>Transformers Model Sonuçları</h3>
+      <canvas id="pretrainedChart"></canvas>
+    </div>
+  {% endif %}
+
+  {% if lstm %}
+    <div class="box" style="flex: 1; min-width: 300px;">
+      <h3>LSTM Model Sonuçları</h3>
+      <canvas id="lstmChart"></canvas>
+    </div>
+  {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  {% if pretrained %}
+    const pretrainedData = {
+      labels: ['Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive'],
+      datasets: [{
+        label: 'Pretrained',
+        data: [
+          {{ pretrained['Very Negative'] }},
+          {{ pretrained['Negative'] }},
+          {{ pretrained['Neutral'] }},
+          {{ pretrained['Positive'] }},
+          {{ pretrained['Very Positive'] }}
+        ],
+        backgroundColor: ['#b71c1c', '#f44336', '#9e9e9e', '#4caf50', '#1b5e20']
+      }]
+    };
+    new Chart(document.getElementById('pretrainedChart'), {
+      type: 'pie',
+      data: pretrainedData
+    });
+  {% endif %}
+
+  {% if lstm %}
+    const lstmData = {
+      labels: ['Positive', 'Negative'],
+      datasets: [{
+        label: 'Custom LSTM',
+        data: [
+          {{ lstm['positive'] }},
+          {{ lstm['negative'] }}
+        ],
+        backgroundColor: ['#2196F3', '#FF9800']
+      }]
+    };
+    new Chart(document.getElementById('lstmChart'), {
+      type: 'pie',
+      data: lstmData
+    });
+  {% endif %}
+</script>
+
+{% endblock %}
